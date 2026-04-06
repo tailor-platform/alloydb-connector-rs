@@ -1,4 +1,4 @@
-# alloydb-connector
+# alloydbconn
 
 A Rust connector for [Google Cloud AlloyDB](https://cloud.google.com/alloydb). Provides secure, authenticated connections to AlloyDB instances using IAM authentication and automatic certificate management.
 
