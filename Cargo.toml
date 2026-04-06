@@ -1,9 +1,10 @@
 [package]
-name = "alloydb-connector"
+name = "alloydbconn"
 version = "0.1.0"
 edition = "2024"
 description = "AlloyDB connector for Rust"
 license = "MIT"
+readme = "README.md"
 repository = "https://github.com/tailor-platform/alloydb-connector-rs"
 
 [dependencies]
