@@ -6,7 +6,7 @@
 //! ## Usage
 //!
 //! ```rust,no_run
-//! use alloydb_connector::{AlloyDbConnector, AlloyDbConfig, IpType};
+//! use alloydbconn::{AlloyDbConnector, AlloyDbConfig, IpType};
 //! use std::sync::Arc;
 //! use std::time::Duration;
 //!

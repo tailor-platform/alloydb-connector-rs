@@ -32,7 +32,7 @@
 //   TEST_ALLOYDB_IP_TYPE=public \
 //   cargo test --package alloydb-connector --test integration_test
 
-use alloydb_connector::{AlloyDbConfig, AlloyDbConnector, IpType};
+use alloydbconn::{AlloyDbConfig, AlloyDbConnector, IpType};
 use std::env;
 use std::sync::{Arc, Once};
 
