@@ -12,7 +12,7 @@ A Rust connector for [Google Cloud AlloyDB](https://cloud.google.com/alloydb). P
 ## Usage
 
 ```rust
-use alloydb_connector::{AlloyDbConfig, AlloyDbConnector};
+use alloydbconn::{AlloyDbConfig, AlloyDbConnector};
 
 let config = AlloyDbConfig::new("projects/my-project/locations/us-central1/clusters/my-cluster/instances/my-instance")
     .with_iam_auth(true);
