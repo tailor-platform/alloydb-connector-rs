@@ -12,14 +12,51 @@ A Rust connector for [Google Cloud AlloyDB](https://cloud.google.com/alloydb). P
 ## Usage
 
 ```rust
-use alloydbconn::{AlloyDbConfig, AlloyDbConnector};
+use alloydbconn::{AlloyDbConfig, AlloyDbConnector, Timeouts};
+use std::sync::Arc;
+use std::time::Duration;
 
-let config = AlloyDbConfig::new("projects/my-project/locations/us-central1/clusters/my-cluster/instances/my-instance")
-    .with_iam_auth(true);
+let config = AlloyDbConfig::new(
+    "projects/my-project/locations/us-central1/clusters/my-cluster/instances/my-instance",
+)?
+.with_iam_auth();
 
-let connector = AlloyDbConnector::new(config).await?;
-let pool = connector.create_pool("my_database", "my_user", None)?;
+let connector = Arc::new(AlloyDbConnector::new(config).await?);
+let pool = connector.clone().create_pool(
+    "my_database".to_string(),
+    "my_user".to_string(),
+    None, // IAM auth
+    10,   // max pool size
+    None, // max connection lifetime (capped at 55 min for IAM auth)
+)?;
 let conn = pool.get().await?;
+```
+
+### Pool timeouts
+
+`create_pool_with_timeouts` accepts deadpool's `Timeouts` to bound waiting for
+a free connection, creating a new connection, and recycling an existing one.
+Without timeouts, `pool.get()` waits indefinitely.
+
+```rust
+let pool = connector.clone().create_pool_with_timeouts(
+    "my_database".to_string(),
+    "my_user".to_string(),
+    None,
+    10,
+    None,
+    Timeouts {
+        wait: Some(Duration::from_secs(5)),
+        create: Some(Duration::from_secs(10)),
+        ..Timeouts::default()
+    },
+)?;
+
+match pool.get().await {
+    Ok(conn) => { /* use conn */ }
+    Err(alloydbconn::PoolError::Timeout(kind)) => { /* kind is Wait, Create or Recycle */ }
+    Err(err) => return Err(err.into()),
+}
 ```
 
 ## License
